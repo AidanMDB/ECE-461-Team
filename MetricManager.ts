@@ -1,6 +1,6 @@
 // takes info from API and outputs metrics
 
-//import {request, gql} from 'graphql-request';
+import {request, gql} from 'graphql-request';
 import { busFactor } from "./BusFactor";
 import { maintainer } from "./Maintainer";
 import { rampUp } from "./rampUp";
@@ -30,9 +30,28 @@ export class MetricManager {
         }
     }
 
-    getMetrics() : string {
+    getMetrics() : number {
+        // get bus factor 
+        const busFactorInstance = new busFactor(this.owner, this.repoName);
+        const busFactorValue = busFactorInstance.getBusFactor();
 
-        return 'hi';
+        // get correctness
+        const correctnessInstance = new correctness(this.owner, this.repoName);
+        const correctnessValue = correctnessInstance.getCorrectness();
+
+        // get ramp up
+        const rampUpInstance = new rampUp(this.owner, this.repoName);
+        const rampUpValue = rampUpInstance.getRampUp();
+
+        // get maintainer
+        const maintainerInstance = new maintainer(this.owner, this.repoName);
+        const maintainerValue = maintainerInstance.getMaintainer();
+
+        // get license
+        const licenseInstance = new license(this.owner, this.repoName);
+        const licenseValue = licenseInstance.getLicense();
+
+        return (0.3 * Number(busFactorValue) + 0.2 * Number(correctnessValue) + 0.2 * Number(rampUpValue) + 0.3 * Number(maintainerValue)) * Number(licenseValue);
     }
 
 
