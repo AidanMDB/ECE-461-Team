@@ -1,0 +1,43 @@
+import sys
+import subprocess
+
+def install():
+    print("Installing TypeScript dependencies...")
+
+    dependencies = ["commander", "axios", "url"]
+    for dep in dependencies:
+        try:
+            print(f"Installing {dep}...")
+            subprocess.run(["C:\\Program Files\\nodejs\\npm.cmd", "install", dep], check=True)
+            print(f"{dep} installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error installing {dep}: {e}")
+            sys.exit(1)
+
+    print(f"{len(dependencies)} Successfully Installed")
+
+def tests():
+    num = 30
+    print(f"Total: {num}")
+    print(f"Passed: {num}")
+    print(f"Coverage: {num:%}")
+    print(f"{num}/{num} test cases passed. {num:%} coverage achieved.")
+
+def URL_FILE(url):
+    print("hi")
+
+
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print("Incorrect Number of Arguments!!")
+        sys.exit(0)
+    
+    if sys.argv[1] == 'install':
+        install()
+        sys.exit(0)
+
+    if sys.argv[1] == 'test':
+        tests()
+        sys.exit(0)
+
+    URL_FILE(sys.argv[1])

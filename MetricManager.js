@@ -1,5 +1,4 @@
 "use strict";
-// takes info from API and outputs metrics
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,14 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MetricManager = void 0;
-//import {request, gql} from 'graphql-request';
-var busFactor_1 = require("./busFactor");
+// takes info from API and outputs metrics
+var BusFactor_1 = require("./BusFactor");
 var rampUp_1 = require("./rampUp");
+var findLicense_1 = require("./findLicense");
 var dotenv = require("dotenv");
 dotenv.config();
 var GITHUB_API = 'https://api.github.com/graphql';
-//const TOKEN = 'YOUR_GITHUB';
-var TOKEN = process.env.GITHUB_TOKEN;
 var MetricManager = /** @class */ (function () {
     /**
      * constructs a metrics manager for a GitHub repository
@@ -70,11 +68,11 @@ var MetricManager = /** @class */ (function () {
      */
     MetricManager.prototype.getMetrics = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var busFactorMetric, busFactorValue, rampUpMetric, rampUpValue;
+            var busFactorMetric, busFactorValue, rampUpMetric, rampUpValue, licenseMetric, exists;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        busFactorMetric = new busFactor_1.busFactor(this.owner, this.repoName);
+                        busFactorMetric = new BusFactor_1.busFactor(this.owner, this.repoName);
                         return [4 /*yield*/, busFactorMetric.calculateBusFactor()];
                     case 1:
                         busFactorValue = _a.sent();
@@ -82,6 +80,11 @@ var MetricManager = /** @class */ (function () {
                         return [4 /*yield*/, rampUpMetric.getRepoStats()];
                     case 2:
                         rampUpValue = _a.sent();
+                        licenseMetric = new findLicense_1.license(this.owner, this.repoName);
+                        return [4 /*yield*/, licenseMetric.getRepoLicense()];
+                    case 3:
+                        exists = _a.sent();
+                        console.log("The License exists: ".concat(exists));
                         //console.log(busFactorValue);
                         return [2 /*return*/, 'Contributors: ' + busFactorValue +
                                 '\n\n ' + 'Repo Stats: ' + rampUpValue];
