@@ -27,7 +27,12 @@ def tests():
     print(f"{num}/{num} test cases passed. {num:%} coverage achieved.")
 
 def URL_FILE(url):
-    print("hi")
+    try:
+        print("Processing URL:")
+        subprocess.run(['node', 'cli_parse.js', url], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error Processing URL: {e}")
+
 
 
 if __name__ == '__main__':
